@@ -2,13 +2,13 @@ from machine import I2S
 from machine import Pin
 import ustruct
 
-# these pins 
+# select the pins that your MCU board supports
 def init_i2s(rate=44100, bits=8, format=I2S.MONO):
     return I2S(
-        0,
-        sck    = Pin(8),  # BCLK
-        ws     = Pin(9),  # LRC
-        sd     = Pin(10), # DIN
+        0,     # MCU I2S channel num
+        sck    = Pin(8),  # BCLK MAX98357A
+        ws     = Pin(9),  # LRC  MAX98357A
+        sd     = Pin(10), # DIN  MAX98357A
         mode   = I2S.TX,
         bits   = bits,
         format = format,
@@ -32,7 +32,7 @@ def read_wav_header(file):
 
 def play_wav(filename):
     with open(filename, "rb") as f:
-#        file.read(44) # skip header
+#        file.read(44) # skip header, replace read_wav_header instance with init_i2s instance
         i2s = read_wav_header(f)
         while True:
             data = f.read(1024)
